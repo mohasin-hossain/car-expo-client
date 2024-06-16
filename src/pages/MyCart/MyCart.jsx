@@ -1,11 +1,25 @@
+import axios from "axios";
+import { useState } from "react";
 import { useLoaderData } from "react-router-dom";
 
 const MyCart = () => {
-  const cart = useLoaderData();
-  const total = cart.reduce((total, cv) => {
+  const loadedCart = useLoaderData();
+  const [cart, setCart] = useState(loadedCart);
+
+  const total = loadedCart.reduce((total, cv) => {
     total += Number(cv.price);
     return total;
   }, 0);
+
+  const handleDeleteProduct = (id) => {
+    axios.delete(`http://localhost:3000/cart/${id}`).then((data) => {
+      if (data.data.deletedCount > 0) {
+        const remaining = cart.filter((item) => item._id !== id);
+        setCart(remaining);
+        alert("Product deleted successfully");
+      }
+    });
+  };
 
   return (
     <div>
@@ -29,7 +43,12 @@ const MyCart = () => {
                   <td>{item.brandName}</td>
                   <td>{item.price} $</td>
                   <td>
-                    <button className="btn">Delete</button>
+                    <button
+                      onClick={() => handleDeleteProduct(item._id)}
+                      className="btn"
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -37,7 +56,9 @@ const MyCart = () => {
           </table>
           <hr />
           <div>
-            <h3 className="text-center text-2xl font-semibold mt-6">Total: {total}$ </h3>
+            <h3 className="text-center text-2xl font-semibold mt-6">
+              Total: {total}${" "}
+            </h3>
           </div>
         </div>
       </div>
