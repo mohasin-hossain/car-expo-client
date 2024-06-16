@@ -1,7 +1,21 @@
+import axios from "axios";
 import { useLoaderData } from "react-router-dom";
 
 const ProductDetails = () => {
   const detailedProduct = useLoaderData();
+  console.log(detailedProduct);
+
+  const handleAddToCart = () => {
+    axios.post("http://localhost:3000/cart", detailedProduct).then((data) => {
+      if (data.data == "Already In the Cart") {
+        alert("Already In the Cart");
+      }
+      if (data.data.insertedId) {
+        alert("Added to cart");
+      }
+    });
+  };
+
   const {
     _id,
     brandName,
@@ -20,7 +34,9 @@ const ProductDetails = () => {
         <p>{price}</p>
         <p>{description}</p>
         <p>{description}</p>
-        <button className="btn">Add to Cart</button>
+        <button onClick={handleAddToCart} className="btn">
+          Add to Cart
+        </button>
       </div>
     </div>
   );
