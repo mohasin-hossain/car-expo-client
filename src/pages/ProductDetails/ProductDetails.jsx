@@ -1,5 +1,7 @@
 import axios from "axios";
 import { useLoaderData } from "react-router-dom";
+import { Bounce, ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ProductDetails = () => {
   const detailedProduct = useLoaderData();
@@ -8,10 +10,30 @@ const ProductDetails = () => {
   const handleAddToCart = () => {
     axios.post("http://localhost:3000/cart", detailedProduct).then((data) => {
       if (data.data == "Already In the Cart") {
-        alert("Already In the Cart");
+        toast('Already in The Cart!', {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+          });
       }
       if (data.data.insertedId) {
-        alert("Added to cart");
+        toast('Added To Cart!', {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+          });
       }
     });
   };
@@ -29,6 +51,7 @@ const ProductDetails = () => {
   return (
     <div>
       <div className="container mx-auto px-10 my-20">
+        <ToastContainer />
         <h1>Product Details</h1>
         <p>{productName}</p>
         <p>{price}</p>
